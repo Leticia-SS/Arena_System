@@ -1,4 +1,4 @@
-package org.example.model;
+package com.example.model;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -21,15 +21,15 @@ public class Score {
     private User user;
 
     @Column(nullable = false)
-    private int wins;
+    private Integer wins;
 
     @Column(nullable = false)
-    private int losses;
+    private Integer losses;
 
     @Column(nullable = false)
-    private int totalMatches;
+    private Integer totalMatches;
 
     @Column(nullable = false)
-    private int points;
+    private Integer points;
 
 }
