@@ -21,7 +21,7 @@ public class Match {
     private StatusEnum status;
     private List<Turn> turnsLog;
     private String currentTurn;
-    private CharacterState char1Statue;
+    private CharacterState char1State;
     private CharacterState char2State;
     private String winnerId;
     private boolean scoreUpdated;
