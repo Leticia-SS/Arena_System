@@ -3,11 +3,13 @@ package com.example.arena_service.dto;
 import com.example.arena_service.model.CharacterState;
 import com.example.arena_service.model.enums.StatusEnum;
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class MatchRepsonseDto {
+public class MatchResponseDto {
     private String matchId;
     private StatusEnum status;
     private String currentTurn;
