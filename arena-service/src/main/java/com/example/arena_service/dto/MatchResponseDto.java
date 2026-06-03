@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class MatchRepsonseDto {
+public class MatchResponseDto {
     private String matchId;
     private StatusEnum status;
     private String currentTurn;
