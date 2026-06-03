@@ -20,9 +20,10 @@ public class CharacterService {
         return characterRepository.findAll();
     }
 
-    public Character findById(String charId) {
-        return characterRepository.findById(charId)
+    public CharacterResponseDto findById(String charId) {
+        Character character = characterRepository.findById(charId)
                 .orElseThrow(() -> new CharacterNotFoundException(charId));
+        return toResponse(character);
     }
 
     public CharacterResponseDto create(CharacterRequestDto dto){
@@ -71,9 +72,7 @@ public class CharacterService {
         return toResponse(characterRepository.save(character));
     }
 
-    public CharacterResponseDto toResponse(Character character){
-        characterRepository.findByName(character.getName()).ifPresent(c->{
-            throw new CharacterAlreadyExistsException(character.getName()); });
+    private CharacterResponseDto toResponse(Character character) {
         return new CharacterResponseDto(
                 character.getId(),
                 character.getName(),
