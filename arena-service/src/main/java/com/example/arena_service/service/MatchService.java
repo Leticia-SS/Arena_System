@@ -1,14 +1,9 @@
 package com.example.arena_service.service;
 
-import com.example.arena_service.dto.CharacterResponseDto;
-import com.example.arena_service.dto.MatchRequestDto;
-import com.example.arena_service.dto.MatchResponseDto;
-import com.example.arena_service.exception.CharacterAlreadyExistsException;
-import com.example.arena_service.exception.CharacterNotFoundException;
-import com.example.arena_service.exception.MatchNotFoundException;
+import com.example.arena_service.dto.*;
+import com.example.arena_service.exception.*;
+import com.example.arena_service.model.*;
 import com.example.arena_service.model.Character;
-import com.example.arena_service.model.CharacterState;
-import com.example.arena_service.model.Match;
 import com.example.arena_service.model.enums.StatusEnum;
 import com.example.arena_service.repository.ICharacterRepository;
 import com.example.arena_service.repository.IMatchRepository;
@@ -62,6 +57,76 @@ public class MatchService {
         return toResponse(matchRepository.save(match));
     }
 
+    public TurnResponseDto playTurn(String matchId, TurnRequestDto dto){
+        Match match = matchRepository.findById(matchId)
+                .orElseThrow(()-> new MatchNotFoundException(matchId));
+        if (!match.getCurrentTurn().equals(dto.getAttackerId())){
+            throw new NotPlayersTurnException(dto.getAttackerId());
+        }
+
+        boolean isPlayer1 = dto.getAttackerId().equals(match.getPlayer1Id());
+        String attackerCharId = isPlayer1 ? match.getChar1Id() : match.getChar2Id();
+        String defenderPlayerid = isPlayer1 ? match.getPlayer2Id() : match.getPlayer1Id();
+
+        Character attackerChar = characterRepository.findById(attackerCharId)
+                .orElseThrow(()-> new CharacterNotFoundException(attackerCharId));
+
+        Move move = attackerChar.getMoveset().stream()
+                .filter(m -> m.getName().equals(dto.getMoveId()))
+                .findFirst()
+                .orElseThrow(()-> new MoveNotFoundException(dto.getMoveId()));
+
+        int diceRoll = (int) (Math.random() * 20) + 1;
+        boolean activated = diceRoll >= move.getActivationValue();
+        int damageDealt = 0;
+
+        if (activated) {
+            if (isPlayer1) {
+                int newHealth = match.getChar2State().getHealth() - move.getDamage();
+                match.getChar2State().setHealth(Math.max(newHealth, 0));
+            } else {
+                int newHealth = match.getChar1State().getHealth() - move.getDamage();
+                match.getChar1State().setHealth(Math.max(newHealth, 0));
+            }
+            damageDealt = move.getDamage();
+        }
+
+        match.setCurrentTurn(defenderPlayerid);
+
+        Turn turn = new Turn();
+        turn.setTurnNumber(match.getTurnsLog().size() +1);
+        turn.setAttackerId(dto.getAttackerId());
+        turn.setMoveUsed(move.getName());
+        turn.setDiceRoll(diceRoll);
+        turn.setActivated(activated);
+        turn.setDamageDealt(damageDealt);
+        turn.setChar1StateAfter(new CharacterState(
+                match.getChar1State().getHealth(),
+                match.getChar1State().getMana(),
+                match.getChar1State().getSanity()
+        ));
+        turn.setChar2StateAfter(new CharacterState(
+                match.getChar2State().getHealth(),
+                match.getChar2State().getMana(),
+                match.getChar2State().getSanity()
+        ));
+
+        String winnerId = null;
+        if (match.getChar1State().getHealth() <= 0){
+            winnerId = match.getPlayer2Id();
+            match.setStatus(StatusEnum.FINISHED);
+            match.setWinnerId(winnerId);
+        } else if (match.getChar2State().getHealth() <= 0) {
+            winnerId = match.getPlayer1Id();
+            match.setStatus(StatusEnum.FINISHED);
+            match.setWinnerId(winnerId);
+        }
+
+        match.getTurnsLog().add(turn);
+        matchRepository.save(match);
+        return toTurnResponse(turn, match, move, diceRoll, damageDealt, activated, winnerId);
+    }
+
     private MatchResponseDto toResponse(Match match) {
         return new MatchResponseDto(
                 match.getId(),
@@ -71,6 +136,23 @@ public class MatchService {
                 match.getChar2State(),
                 match.getWinnerId(),
                 match.isScoreUpdated()
+        );
+    }
+
+    private TurnResponseDto toTurnResponse(Turn turn, Match match, Move move, int diceRoll, int damageDealt, boolean activated, String winnerId) {
+        return new TurnResponseDto(
+                turn.getTurnNumber(),
+                diceRoll,
+                move.getActivationValue(),
+                activated,
+                damageDealt,
+                move.getName(),
+                match.getChar1State(),
+                match.getChar2State(),
+                match.getStatus(),
+                match.getCurrentTurn(),
+                winnerId,
+                false
         );
     }
 
