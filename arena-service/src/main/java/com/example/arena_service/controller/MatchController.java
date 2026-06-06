@@ -5,6 +5,7 @@ import com.example.arena_service.dto.MatchResponseDto;
 import com.example.arena_service.dto.TurnRequestDto;
 import com.example.arena_service.dto.TurnResponseDto;
 import com.example.arena_service.service.MatchService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,12 +30,12 @@ public class MatchController {
     }
 
     @PostMapping
-    public ResponseEntity<MatchResponseDto> createMatch(@RequestBody MatchRequestDto match){
+    public ResponseEntity<MatchResponseDto> createMatch(@RequestBody @Valid MatchRequestDto match){
         return ResponseEntity.status(HttpStatus.CREATED).body(matchService.create(match));
     }
 
     @PostMapping("/{id}/turn")
-    public ResponseEntity<TurnResponseDto> executeTurn(@PathVariable String id, @RequestBody TurnRequestDto turn){
+    public ResponseEntity<TurnResponseDto> executeTurn(@PathVariable String id, @RequestBody @Valid TurnRequestDto turn){
         return ResponseEntity.ok(matchService.playTurn(id, turn));
     }
 

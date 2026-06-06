@@ -1,5 +1,6 @@
 package com.example.arena_service.model;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 @Data
@@ -7,7 +8,9 @@ import lombok.*;
 @NoArgsConstructor
 public class Turn {
     private Integer turnNumber;
+    @NotBlank(message = "Atacante é obrigatório")
     private String attackerId;
+    @NotBlank(message = "Move é obrigatório")
     private String moveUsed;
     private Integer diceRoll;
     private boolean activated;
