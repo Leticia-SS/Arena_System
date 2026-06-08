@@ -2,7 +2,6 @@ package com.example.arena_service.controller;
 
 import com.example.arena_service.dto.CharacterRequestDto;
 import com.example.arena_service.dto.CharacterResponseDto;
-import com.example.arena_service.model.Character;
 import com.example.arena_service.service.CharacterService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
