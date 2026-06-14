@@ -16,8 +16,11 @@ import java.util.List;
 public class CharacterService {
     private final ICharacterRepository characterRepository;
 
-    public List<Character> findAll() {
-        return characterRepository.findAll();
+    public List<CharacterResponseDto> findAll() {
+        return characterRepository.findAll()
+                .stream()
+                .map(this::toResponse)
+                .toList();
     }
 
     public CharacterResponseDto findById(String charId) {

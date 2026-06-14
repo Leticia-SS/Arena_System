@@ -17,5 +17,5 @@ public class Move {
     private MoveClassEnum moveClass;
     private TypeEnum type;
     private String description;
-    private Integer damage;
+    private String damageDice;
 }

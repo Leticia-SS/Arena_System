@@ -14,12 +14,17 @@ spring:
               filters:
                 - StripPrefix=1
 
-            - id: arena-service
+            - id: arena-service-characters
               uri: lb://ARENA-SERVICE
               predicates:
                 - Path=/api/characters/**
+              filters:
+                - StripPrefix=1
+
+            - id: arena-service-matches
+              uri: lb://ARENA-SERVICE
+              predicates:
                 - Path=/api/matches/**
-                - Path=/api/traits/**
               filters:
                 - StripPrefix=1
 
@@ -29,7 +34,7 @@ eureka:
       defaultZone: http://localhost:8761/eureka/
 
 server:
-  port: 8080
+  port: 8085
 
 management:
   endpoints:
