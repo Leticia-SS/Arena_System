@@ -2,10 +2,10 @@ package com.example.service;
 
 import com.example.dto.ScoreDto;
 import com.example.dto.UserRankingDto;
+import com.example.exception.UserNotFoundException;
 import com.example.model.Score;
 import com.example.model.User;
 import com.example.repository.UserRepository;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,9 +19,7 @@ public class UserService {
     public User getById(Long id){
         return userRepository.findById(id)
                 .orElseThrow(() ->
-                        new EntityNotFoundException(
-                                "Usuário não encontrado com id " + id
-                        )
+                        new UserNotFoundException(id)
                 );
     }
 

@@ -7,6 +7,7 @@ import com.example.dto.UserRankingDto;
 import com.example.model.Score;
 import com.example.model.User;
 import com.example.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -69,7 +70,7 @@ public class UserController {
     @PostMapping("{id}/score")
     public ResponseEntity<Void> updateScore(
             @PathVariable Long id,
-            @RequestBody UpdateScoreRequest request
+            @Valid @RequestBody UpdateScoreRequest request
             ) {
         userService.updateScore(id, request.victory());
         return ResponseEntity.noContent().build();
