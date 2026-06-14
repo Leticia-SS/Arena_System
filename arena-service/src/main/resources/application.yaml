@@ -1,9 +1,19 @@
 spring:
   application:
     name: arena-service
+  mongodb:
+    uri: mongodb://localhost:27017/arena_db
+
+
+
+#  kafka:
+#    bootsrap-servers: localhost:9092
+#    producer:
+#      key-serializer: org.apache.kafka.common.serialization.LongSerializer
+#      value-serializer: org.apache.kafka.commom.serialization.StringSerializer
 
 server:
-  port: 8089
+  port: 9089
 
 eureka:
   instance:
@@ -13,3 +23,30 @@ eureka:
       defaultZone: http://localhost:8761/eureka/
     register-with-eureka: true
     fetch-registry: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+integrations:
+  user-service:
+    base-url: http://user-service
+
+resilience4j:
+  retry:
+    instances:
+      user-service:
+        maxAttempts: 3
+        waitDuration: 3000ms
+        retryExceptions:
+          - org.springframework.web.client.ResourceAccessException
+  circuitbreaker:
+    instances:
+      user-service:
+        slidingWindowType: COUNT_BASED
+        slidingWindowSize: 5
+        minimumNumberOfCalls: 2
+        failureRateThreshold: 50
+        waitDurationInOpenState: 15s
+        permittedNumberOfCallsInHalfOpenState: 2

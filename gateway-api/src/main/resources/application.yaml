@@ -14,10 +14,16 @@ spring:
               filters:
                 - StripPrefix=1
 
-            - id: arena-service
+            - id: arena-service-characters
               uri: lb://ARENA-SERVICE
               predicates:
                 - Path=/api/characters/**
+              filters:
+                - StripPrefix=1
+
+            - id: arena-service-matches
+              uri: lb://ARENA-SERVICE
+              predicates:
                 - Path=/api/matches/**
               filters:
                 - StripPrefix=1

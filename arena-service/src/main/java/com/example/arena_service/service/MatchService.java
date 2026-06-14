@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.IntStream;
 
 @Service
 @AllArgsConstructor
@@ -81,16 +82,16 @@ public class MatchService {
         int damageDealt = 0;
 
         if (activated) {
+            int damage = rollDice(move.getDamageDice());
             if (isPlayer1) {
-                int newHealth = match.getChar2State().getHealth() - move.getDamage();
+                int newHealth = match.getChar2State().getHealth() - damage;
                 match.getChar2State().setHealth(Math.max(newHealth, 0));
             } else {
-                int newHealth = match.getChar1State().getHealth() - move.getDamage();
+                int newHealth = match.getChar1State().getHealth() - damage;
                 match.getChar1State().setHealth(Math.max(newHealth, 0));
             }
-            damageDealt = move.getDamage();
+            damageDealt = damage;
         }
-
         match.setCurrentTurn(defenderPlayerid);
 
         Turn turn = new Turn();
@@ -125,6 +126,16 @@ public class MatchService {
         match.getTurnsLog().add(turn);
         matchRepository.save(match);
         return toTurnResponse(turn, match, move, diceRoll, damageDealt, activated, winnerId);
+    }
+
+    private int rollDice(String damageDice) {
+        if (damageDice == null || damageDice.isBlank()) return 0;
+        String[] parts = damageDice.split("d");
+        int quantity = Integer.parseInt(parts[0]);
+        int sides = Integer.parseInt(parts[1]);
+        return IntStream.range(0, quantity)
+                .map(i->(int)(Math.random() * sides) + 1)
+                .sum();
     }
 
     private MatchResponseDto toResponse(Match match) {
