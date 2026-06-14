@@ -1,5 +1,6 @@
 package com.example.arena_service.service;
 
+import com.example.arena_service.client.UserServiceClient;
 import com.example.arena_service.dto.*;
 import com.example.arena_service.exception.*;
 import com.example.arena_service.model.*;
@@ -19,6 +20,7 @@ import java.util.stream.IntStream;
 public class MatchService {
     private final IMatchRepository matchRepository;
     private final ICharacterRepository characterRepository;
+    private final UserServiceClient userServiceClient;
 
     public MatchResponseDto findById(String id){
         Match match = matchRepository.findById(id)
@@ -61,6 +63,10 @@ public class MatchService {
     public TurnResponseDto playTurn(String matchId, TurnRequestDto dto){
         Match match = matchRepository.findById(matchId)
                 .orElseThrow(()-> new MatchNotFoundException(matchId));
+
+        if (match.getStatus() == StatusEnum.FINISHED) {
+            throw new MatchFinishedException(matchId);
+        }
         if (!match.getCurrentTurn().equals(dto.getAttackerId())){
             throw new NotPlayersTurnException(dto.getAttackerId());
         }
@@ -121,6 +127,12 @@ public class MatchService {
             winnerId = match.getPlayer1Id();
             match.setStatus(StatusEnum.FINISHED);
             match.setWinnerId(winnerId);
+        }
+
+        if (match.getStatus() == StatusEnum.FINISHED){
+            String loserId = winnerId.equals(match.getPlayer1Id()) ? match.getPlayer1Id() : match.getPlayer2Id();
+            boolean updated = userServiceClient.updateScore(winnerId, loserId);
+            match.setScoreUpdated(updated);
         }
 
         match.getTurnsLog().add(turn);
