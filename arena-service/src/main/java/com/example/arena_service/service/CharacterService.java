@@ -59,6 +59,7 @@ public class CharacterService {
         return toResponse(characterRepository.save(character));
     }
 
+
     @Caching(evict = {
             @CacheEvict(value = "characters", key = "#charId"),
             @CacheEvict(value = "characters", key = "'all'")})
