@@ -4,13 +4,11 @@ spring:
   mongodb:
     uri: mongodb://localhost:27017/arena_db
 
-
-
-#  kafka:
-#    bootsrap-servers: localhost:9092
-#    producer:
-#      key-serializer: org.apache.kafka.common.serialization.LongSerializer
-#      value-serializer: org.apache.kafka.commom.serialization.StringSerializer
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
 
 server:
   port: 9089

@@ -7,6 +7,9 @@ import com.example.arena_service.exception.CharacterNotFoundException;
 import com.example.arena_service.model.Character;
 import com.example.arena_service.repository.ICharacterRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,6 +19,7 @@ import java.util.List;
 public class CharacterService {
     private final ICharacterRepository characterRepository;
 
+    @Cacheable(value = "characters", key = "'all'")
     public List<CharacterResponseDto> findAll() {
         return characterRepository.findAll()
                 .stream()
@@ -23,12 +27,14 @@ public class CharacterService {
                 .toList();
     }
 
+    @Cacheable(value = "characters", key = "#charId")
     public CharacterResponseDto findById(String charId) {
         Character character = characterRepository.findById(charId)
                 .orElseThrow(() -> new CharacterNotFoundException(charId));
         return toResponse(character);
     }
 
+    @CacheEvict(value = "characters", key = "'all'")
     public CharacterResponseDto create(CharacterRequestDto dto){
         characterRepository.findByName(dto.getName()).ifPresent(c->{
             throw new CharacterAlreadyExistsException(dto.getName());
@@ -53,6 +59,10 @@ public class CharacterService {
         return toResponse(characterRepository.save(character));
     }
 
+
+    @Caching(evict = {
+            @CacheEvict(value = "characters", key = "#charId"),
+            @CacheEvict(value = "characters", key = "'all'")})
     public CharacterResponseDto update(String charId, CharacterRequestDto dto) {
         Character character = characterRepository.findById(charId)
                 .orElseThrow(() -> new CharacterNotFoundException(charId));
