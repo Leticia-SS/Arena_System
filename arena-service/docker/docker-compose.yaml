@@ -49,6 +49,36 @@ services:
       KAFKA_CLUSTERS_0_NAME: arena-local
       KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:29092
 
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: arena-prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - prometheus-data:/prometheus
+      - ./prometheus/prometheus.yaml:/etc/prometheus/prometheus.yaml:ro
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yaml"
+      - "--storage.tsdb.path=/prometheus"
+      - "--web.enable-lifecycle"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: arena-grafana
+    ports:
+      - "3000:3000"
+    environment:
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: admin
+    volumes:
+      - grafana-data:/var/lib/grafana
+    depends_on:
+      - prometheus
+
 volumes:
   mongo-data:
   kafka-data:
+  prometheus-data:
+  grafana-data:
