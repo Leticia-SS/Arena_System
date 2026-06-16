@@ -16,14 +16,14 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    public User getById(Long id){
+    public User getById(String id){
         return userRepository.findById(id)
                 .orElseThrow(() ->
                         new UserNotFoundException(id)
                 );
     }
 
-    public ScoreDto getScoreByUserId(Long id){
+    public ScoreDto getScoreByUserId(String id){
         User user = getById(id);
         Score score = user.getScore();
 
@@ -35,7 +35,7 @@ public class UserService {
         );
     }
 
-    public void updateScore(Long userId, Boolean victory) {
+    public void updateScore(String userId, Boolean victory) {
         User user = getById(userId);
         Score score = user.getScore();
 
@@ -55,7 +55,7 @@ public class UserService {
         return userRepository.findRanking();
     }
 
-    public List<UserRankingDto> compareUsers(Long u1, Long u2) {
+    public List<UserRankingDto> compareUsers(String u1, String u2) {
         User user1 = getById(u1);
         User user2 = getById(u2);
 

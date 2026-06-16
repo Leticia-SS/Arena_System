@@ -27,7 +27,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getById(@PathVariable Long id){
+    public ResponseEntity<?> getById(@PathVariable String id){
         User u = userService.getById(id);
         Score s = u.getScore();
         ScoreDto scoreDto = new ScoreDto(
@@ -47,7 +47,7 @@ public class UserController {
     }
 
     @GetMapping("{id}/score")
-    public ResponseEntity<ScoreDto> getScore(@PathVariable Long id) {
+    public ResponseEntity<ScoreDto> getScore(@PathVariable String id) {
         ScoreDto scoreDto = userService.getScoreByUserId(id);
         return ResponseEntity.status(HttpStatus.OK).body(scoreDto);
     }
@@ -59,8 +59,8 @@ public class UserController {
 
     @GetMapping("/ranking/compare")
     public ResponseEntity<List<UserRankingDto>> compare(
-            @RequestParam Long user1,
-            @RequestParam Long user2
+            @RequestParam String user1,
+            @RequestParam String user2
     ) {
         return ResponseEntity.ok(
                 userService.compareUsers(user1, user2)
@@ -69,7 +69,7 @@ public class UserController {
 
     @PostMapping("{id}/score")
     public ResponseEntity<Void> updateScore(
-            @PathVariable Long id,
+            @PathVariable String id,
             @Valid @RequestBody UpdateScoreRequest request
             ) {
         userService.updateScore(id, request.victory());
