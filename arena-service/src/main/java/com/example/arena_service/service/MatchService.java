@@ -29,11 +29,11 @@ public class MatchService {
         return toResponse(match);
     }
 
-    public List<MatchResponseDto> findByUserId(String userId){
-        return matchRepository.findByPlayer1IdOrPlayer2Id(userId, userId).stream()
-                .map(this::toResponse)
-                .toList();
-    }
+//    public List<MatchResponseDto> findByUserId(String userId){
+//        return matchRepository.findByPlayer1IdOrPlayer2Id(userId, userId).stream()
+//                .map(this::toResponse)
+//                .toList();
+//    }
 
     public MatchResponseDto create(MatchRequestDto dto){
         Character char1 = characterRepository.findById(dto.getChar1Id())
