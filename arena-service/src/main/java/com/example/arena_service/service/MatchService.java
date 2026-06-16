@@ -1,6 +1,5 @@
 package com.example.arena_service.service;
 
-import com.example.arena_service.client.UserServiceClient;
 import com.example.arena_service.dto.*;
 import com.example.arena_service.event.MatchFinishedEvent;
 import com.example.arena_service.exception.*;
