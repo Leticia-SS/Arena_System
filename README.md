@@ -1,13 +1,5 @@
 # Arena System 
 
-**Integrantes:**
-| Aluno | Microservice | Banco | Responsabilidade |
-|---|---|---|---|
-| Leticia Saraiva | arena-service | MongoDB | Personagens, combate e partidas |
-| Sarah Figueiredo | user-service | PostgreSQL | Cadastro, autenticação e pontuação |
-
----
-
 ## Descrição do Projeto
 
 O Arena System é uma plataforma digital para gestão e simulação de partidas de um jogo físico competitivo chamado Arena. Cada jogador escolhe um personagem com atributos como vida, sanidade, mana e velocidade, e joga turnos estratégicos usando um moveset com 13 habilidades. A API gerencia o motor de combate, rola os dados internamente e aplica os resultados ao estado da partida.
@@ -63,7 +55,8 @@ Responsável por personagens, combate turno a turno e registro de partidas.
 5. Se resultado < activationValue, o turno passa para o oponente
 6. Se a partida terminar, o `winnerId` é definido e um evento `MatchFinished` é publicado no Kafka
 
-### user-service (Sarah Figueiredo)
+### user-service[requests.log](https://github.com/user-attachments/files/29025768/requests.log)
+
 
 Responsável por cadastro, autenticação e pontuação dos jogadores.
 
@@ -129,7 +122,7 @@ Implementada no `arena-service` com Resilience4j, protegendo a chamada ao `user-
 
 ---
 
-## Kafka — Comunicação Assíncrona
+## Kafka
 
 O `arena-service` publica um evento de domínio ao final de cada partida.
 
@@ -277,6 +270,14 @@ POST http://localhost:8085/api/matches/{id}/turn
   "moveId": "Unibeam"
 }
 ```
+
+---
+
+**Integrantes:**
+| Aluno | Microservice | Banco | Responsabilidade |
+|---|---|---|---|
+| Leticia Saraiva | arena-service | MongoDB | Personagens, combate e partidas |
+| Sarah Figueiredo | user-service | PostgreSQL | Cadastro, autenticação e pontuação |
 
 ---
 
