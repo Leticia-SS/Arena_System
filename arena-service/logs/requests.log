@@ -1,0 +1,42 @@
+17:11:25 [d9ca7c55] INFO  REQUEST_LOGGER - POST /matches | player1Id: 987654321 | player2Id: 123456789
+17:11:46 [03bde793] INFO  REQUEST_LOGGER - POST /matches/6a31aded47a97bfe9f78958d/turn | attackerId: 123456789
+17:11:50 [2b4f633d] INFO  REQUEST_LOGGER - POST /matches/6a31aded47a97bfe9f78958d/turn | attackerId: 987654321
+17:11:56 [00e08b1e] INFO  REQUEST_LOGGER - POST /matches/6a31aded47a97bfe9f78958d/turn | attackerId: 123456789
+17:11:58 [e099f48d] INFO  REQUEST_LOGGER - POST /matches/6a31aded47a97bfe9f78958d/turn | attackerId: 987654321
+17:12:01 [898ae243] INFO  REQUEST_LOGGER - POST /matches/6a31aded47a97bfe9f78958d/turn | attackerId: 123456789
+17:12:03 [aaf95767] INFO  REQUEST_LOGGER - POST /matches/6a31aded47a97bfe9f78958d/turn | attackerId: 987654321
+17:12:06 [1bb0f8f1] INFO  REQUEST_LOGGER - POST /matches/6a31aded47a97bfe9f78958d/turn | attackerId: 123456789
+17:12:09 [1b3c37b4] INFO  REQUEST_LOGGER - POST /matches/6a31aded47a97bfe9f78958d/turn | attackerId: 987654321
+17:12:12 [f7703584] INFO  REQUEST_LOGGER - POST /matches/6a31aded47a97bfe9f78958d/turn | attackerId: 123456789
+17:12:14 [64c54979] INFO  REQUEST_LOGGER - POST /matches/6a31aded47a97bfe9f78958d/turn | attackerId: 987654321
+17:12:17 [41bea79b] INFO  REQUEST_LOGGER - POST /matches/6a31aded47a97bfe9f78958d/turn | attackerId: 123456789
+17:12:19 [eab048aa] INFO  REQUEST_LOGGER - POST /matches/6a31aded47a97bfe9f78958d/turn | attackerId: 987654321
+17:12:21 [6d397314] INFO  REQUEST_LOGGER - POST /matches/6a31aded47a97bfe9f78958d/turn | attackerId: 123456789
+17:12:25 [455d4fae] INFO  REQUEST_LOGGER - POST /matches/6a31aded47a97bfe9f78958d/turn | attackerId: 987654321
+17:12:27 [c2646461] INFO  REQUEST_LOGGER - POST /matches/6a31aded47a97bfe9f78958d/turn | attackerId: 123456789
+17:12:30 [1c37fc6d] INFO  REQUEST_LOGGER - POST /matches/6a31aded47a97bfe9f78958d/turn | attackerId: 987654321
+17:12:33 [f302d6e5] INFO  REQUEST_LOGGER - POST /matches/6a31aded47a97bfe9f78958d/turn | attackerId: 123456789
+17:12:35 [7bbef85f] INFO  REQUEST_LOGGER - POST /matches/6a31aded47a97bfe9f78958d/turn | attackerId: 987654321
+17:12:38 [be75a069] INFO  REQUEST_LOGGER - POST /matches/6a31aded47a97bfe9f78958d/turn | attackerId: 123456789
+17:12:40 [dfbc34ca] INFO  REQUEST_LOGGER - POST /matches/6a31aded47a97bfe9f78958d/turn | attackerId: 987654321
+17:12:42 [4cd2b02a] INFO  REQUEST_LOGGER - POST /matches/6a31aded47a97bfe9f78958d/turn | attackerId: 123456789
+17:12:45 [4ae22e66] INFO  REQUEST_LOGGER - POST /matches/6a31aded47a97bfe9f78958d/turn | attackerId: 987654321
+17:12:47 [42551c67] INFO  REQUEST_LOGGER - POST /matches/6a31aded47a97bfe9f78958d/turn | attackerId: 123456789
+17:12:49 [a5630a03] INFO  REQUEST_LOGGER - POST /matches/6a31aded47a97bfe9f78958d/turn | attackerId: 987654321
+17:12:52 [ecada97e] INFO  REQUEST_LOGGER - POST /matches/6a31aded47a97bfe9f78958d/turn | attackerId: 123456789
+17:12:54 [82b41dea] INFO  REQUEST_LOGGER - POST /matches/6a31aded47a97bfe9f78958d/turn | attackerId: 987654321
+17:12:56 [4974cebc] INFO  REQUEST_LOGGER - POST /matches/6a31aded47a97bfe9f78958d/turn | attackerId: 123456789
+17:12:58 [de507dcc] INFO  REQUEST_LOGGER - POST /matches/6a31aded47a97bfe9f78958d/turn | attackerId: 987654321
+17:12:58 [de507dcc] INFO  c.e.a.kafka.MatchEventProducer - Publicando evento no Kafka = topic: match-finished | matchId: 6a31aded47a97bfe9f78958d | winnerId: 987654321 | loserId: 123456789
+17:12:59 [de507dcc] INFO  c.e.a.kafka.MatchEventProducer - Evento publicado com sucesso no tópico: match-finished | matchId: 6a31aded47a97bfe9f78958d
+17:13:04 [64170a92] INFO  REQUEST_LOGGER - POST /matches/6a31aded47a97bfe9f78958d/turn | attackerId: 123456789
+17:24:15 [f97a6113] INFO  REQUEST_LOGGER - GET /characters | buscando todos os personagens
+17:24:18 [0080c634] INFO  REQUEST_LOGGER - GET /characters | buscando todos os personagens
+17:24:23 [3d36a1e2] INFO  REQUEST_LOGGER - GET /characters | buscando todos os personagens
+17:24:24 [0ba1e47f] INFO  REQUEST_LOGGER - GET /characters | buscando todos os personagens
+17:24:25 [ea49e7e1] INFO  REQUEST_LOGGER - GET /characters | buscando todos os personagens
+17:24:26 [e7ce7741] INFO  REQUEST_LOGGER - GET /characters | buscando todos os personagens
+17:25:36 [e808e3e7] INFO  REQUEST_LOGGER - GET /characters | buscando todos os personagens
+17:28:15 [0886b32c] INFO  REQUEST_LOGGER - GET /characters | buscando todos os personagens
+17:28:22 [e5f5d518] INFO  REQUEST_LOGGER - GET /characters/6a30b62821cf3e85f59df8a3 | buscando personagem por id
+17:28:24 [859d72ae] INFO  REQUEST_LOGGER - GET /characters/6a30b62821cf3e85f59df8a3 | buscando personagem por id

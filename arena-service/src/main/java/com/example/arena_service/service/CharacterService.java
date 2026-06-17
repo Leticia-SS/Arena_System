@@ -7,6 +7,8 @@ import com.example.arena_service.exception.CharacterNotFoundException;
 import com.example.arena_service.model.Character;
 import com.example.arena_service.repository.ICharacterRepository;
 import lombok.AllArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
@@ -18,9 +20,11 @@ import java.util.List;
 @AllArgsConstructor
 public class CharacterService {
     private final ICharacterRepository characterRepository;
+    private static final Logger logger = LoggerFactory.getLogger(CharacterService.class);
 
     @Cacheable(value = "characters", key = "'all'")
     public List<CharacterResponseDto> findAll() {
+        logger.info("Cache miss | buscando todos os personagens no banco");
         return characterRepository.findAll()
                 .stream()
                 .map(this::toResponse)
@@ -29,6 +33,7 @@ public class CharacterService {
 
     @Cacheable(value = "characters", key = "#charId")
     public CharacterResponseDto findById(String charId) {
+        logger.info("Cache miss | buscando personagem {} no banco", charId);
         Character character = characterRepository.findById(charId)
                 .orElseThrow(() -> new CharacterNotFoundException(charId));
         return toResponse(character);

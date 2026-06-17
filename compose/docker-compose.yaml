@@ -29,6 +29,14 @@ services:
     volumes:
       - mongo-data:/data/db
       - ./mongo-init:/docker-entrypoint-initdb.d
+  logstash:
+    image: docker.elastic.co/logstash/logstash:8.13.0
+    container_name: arena-logstash
+    ports:
+      - "5001:5000"
+      - "9600:9600"
+    volumes:
+      - ./logstash/pipeline:/usr/share/logstash/pipeline
 
   kafka:
     image: apache/kafka:4.1.0
