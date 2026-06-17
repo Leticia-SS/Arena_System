@@ -55,7 +55,7 @@ Responsável por personagens, combate turno a turno e registro de partidas.
 5. Se resultado < activationValue, o turno passa para o oponente
 6. Se a partida terminar, o `winnerId` é definido e um evento `MatchFinished` é publicado no Kafka
 
-### user-service[requests.log](https://github.com/user-attachments/files/29025768/requests.log)
+### user-service
 
 
 Responsável por cadastro, autenticação e pontuação dos jogadores.
@@ -185,21 +185,7 @@ Os logs são estruturados em três destinos:
 **Arquivo (`logs/requests.log`):** apenas logs de requisições dos endpoints de partidas, turnos e personagens, e logs do producer Kafka  
 **Logstash:** todos os logs enviados em formato JSON via TCP, enriquecidos com campos `service`, `ambiente` e `stack`
 
-**Exemplos de logs importantes:**
-
-```
-# Requisição recebida
-17:12:05 [9c0425ef] INFO REQUEST_LOGGER - GET /characters | buscando todos os personagens
-
-# Cache miss — busca no banco (aparece apenas na primeira chamada)
-17:12:05 [9c0425ef] INFO CharacterService - Cache miss | buscando todos os personagens no banco
-
-# Cache hit — nas chamadas seguintes o log do service não aparece, provando que o cache atuou
-
-# Evento Kafka publicado
-17:12:58 [de507dcc] INFO MatchEventProducer - Publicando evento no Kafka = topic: match-finished | matchId: 6a31... | winnerId: 123456789 | loserId: 987654321
-17:12:58 [de507dcc] INFO MatchEventProducer - Evento publicado com sucesso no tópico: match-finished | matchId: 6a31...
-```
+**Arquivo com exemplos de logs importantes:** [requests.log](https://github.com/user-attachments/files/29025768/requests.log)
 
 ### Correlação entre serviços
 
