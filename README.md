@@ -140,7 +140,7 @@ O `arena-service` publica um evento de domínio ao final de cada partida.
 }
 ```
 
-**Justificativa do uso do Kafka:** A atualização de pontuação no `user-service` não precisa acontecer de forma síncrona durante o fluxo de combate. Usando um evento assíncrono, o `arena-service` não precisa aguardar a resposta do `user-service`, reduzindo o acoplamento entre os serviços e evitando falhas em cascata.
+A atualização de pontuação no `user-service` não precisa acontecer de forma síncrona durante o fluxo de combate. Usando um evento assíncrono, o `arena-service` não precisa aguardar a resposta do `user-service`, reduzindo o acoplamento entre os serviços e evitando falhas em cascata.
 
 **Acesso ao Kafka UI:** http://localhost:8086
 
