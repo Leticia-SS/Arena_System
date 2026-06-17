@@ -20,8 +20,8 @@ O sistema é dividido em quatro projetos Spring Boot independentes:
 
 ```
 Arena_System/
-├── discovery-server      # Eureka Server — registro e descoberta de serviços
-├── api-gateway           # Spring Cloud Gateway — ponto de entrada único
+├── discovery-server      # Eureka Server: registro e descoberta de serviços
+├── api-gateway           # Spring Cloud Gateway: ponto de entrada único
 ├── arena-service         # Gerencia personagens, combate e partidas (MongoDB)
 └── user-service          # Gerencia usuários e pontuação (PostgreSQL)
 ```
