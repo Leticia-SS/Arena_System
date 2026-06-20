@@ -1,5 +1,6 @@
 package com.example.advice;
 
+import com.example.exception.EmailAlreadyExistsException;
 import com.example.exception.UserNotFoundException;
 import com.example.payload.ErrorResponse;
 import org.springframework.http.HttpStatus;
@@ -9,13 +10,18 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @RestControllerAdvice
 public class ApiExceptionAdvice {
 
+    private static final Logger logger = LoggerFactory.getLogger("REQUEST_LOGGER");
+
     // 1. Usuário não encontrado
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleUserNotFound(UserNotFoundException ex) {
+        logger.error("GET /users/{} | usuário não encontrado", ex.getMessage());
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
                 .body(new ErrorResponse(
@@ -72,6 +78,17 @@ public class ApiExceptionAdvice {
                 .body(new ErrorResponse(
                         "Erro interno",
                         "Ocorreu um erro inesperado no servidor"
+                ));
+    }
+
+    //6 - Email já cadastrado
+    @ExceptionHandler(EmailAlreadyExistsException.class)
+    public ResponseEntity<ErrorResponse> handleEmailAlreadyExists(EmailAlreadyExistsException ex) {
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body(new ErrorResponse(
+                        "Email já cadastrado",
+                        ex.getMessage()
                 ));
     }
 }
