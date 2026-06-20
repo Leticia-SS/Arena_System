@@ -1,6 +1,26 @@
 version: '3.8'
 
 services:
+
+  postgres:
+    image: postgres:17
+    platform: linux/amd64
+    container_name: arena-system-postgres
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./postgres/init:/docker-entrypoint-initdb.d
+      - arena-system-postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres -d postgres" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
   arena-mongodb:
     image: mongo:8
     container_name: arena-mongodb
@@ -87,6 +107,7 @@ services:
 
 volumes:
   mongo-data:
+  arena-system-postgres-data:
   kafka-data:
   prometheus-data:
   grafana-data:

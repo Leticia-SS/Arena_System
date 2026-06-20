@@ -1,12 +1,12 @@
 package com.example.controller;
 
-import com.example.dto.ScoreDto;
-import com.example.dto.UpdateScoreRequest;
-import com.example.dto.UserDto;
-import com.example.dto.UserRankingDto;
+import com.example.dto.*;
 import com.example.model.Score;
 import com.example.model.User;
 import com.example.service.UserService;
+import jakarta.validation.Valid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -20,13 +20,15 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
+    private static final Logger logger = LoggerFactory.getLogger("REQUEST_LOGGER");
 
     public UserController (UserService userService) {
         this.userService = userService;
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getById(@PathVariable Long id){
+    public ResponseEntity<?> getById(@PathVariable String id){
+        logger.info("GET /users/{} | buscando usuário", id);
         User u = userService.getById(id);
         Score s = u.getScore();
         ScoreDto scoreDto = new ScoreDto(
@@ -46,21 +48,24 @@ public class UserController {
     }
 
     @GetMapping("{id}/score")
-    public ResponseEntity<ScoreDto> getScore(@PathVariable Long id) {
+    public ResponseEntity<ScoreDto> getScore(@PathVariable String id) {
+        logger.info("GET /users/{} | action=get_score", id);
         ScoreDto scoreDto = userService.getScoreByUserId(id);
         return ResponseEntity.status(HttpStatus.OK).body(scoreDto);
     }
 
     @GetMapping("/ranking")
     public ResponseEntity<List<UserRankingDto>> getRanking() {
+        logger.info("GET /users/ranking | action=get_ranking");
         return ResponseEntity.status(HttpStatus.OK).body(userService.getRanking());
     }
 
     @GetMapping("/ranking/compare")
     public ResponseEntity<List<UserRankingDto>> compare(
-            @RequestParam Long user1,
-            @RequestParam Long user2
+            @RequestParam String user1,
+            @RequestParam String user2
     ) {
+        logger.info("GET /users/ranking/compare | user1={} user2={}", user1, user2);
         return ResponseEntity.ok(
                 userService.compareUsers(user1, user2)
         );
@@ -68,13 +73,22 @@ public class UserController {
 
     @PostMapping("{id}/score")
     public ResponseEntity<Void> updateScore(
-            @PathVariable Long id,
-            @RequestBody UpdateScoreRequest request
+            @PathVariable String id,
+            @Valid @RequestBody UpdateScoreRequest request
             ) {
+        logger.info("POST /users/{}/score | victory={} | status=START", id, request.victory());
         userService.updateScore(id, request.victory());
+        logger.info("POST /users/{}/score | victory={} | status=SUCCESS", id, request.victory());
         return ResponseEntity.noContent().build();
     }
 
-
+    @PostMapping("/register")
+    public ResponseEntity<Void> register(
+            @Valid @RequestBody RegisterUserRequest request
+    ) {
+        logger.info("POST /users/register | email={}", request.email());
+        userService.register(request);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
 
 }

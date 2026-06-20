@@ -1,12 +1,15 @@
 package com.example.service;
 
+import com.example.dto.RegisterUserRequest;
 import com.example.dto.ScoreDto;
 import com.example.dto.UserRankingDto;
+import com.example.exception.EmailAlreadyExistsException;
+import com.example.exception.UserNotFoundException;
 import com.example.model.Score;
 import com.example.model.User;
 import com.example.repository.UserRepository;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,17 +18,42 @@ import java.util.List;
 public class UserService {
     @Autowired
     private UserRepository userRepository;
+    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-    public User getById(Long id){
+    public User getById(String id) {
         return userRepository.findById(id)
                 .orElseThrow(() ->
-                        new EntityNotFoundException(
-                                "Usuário não encontrado com id " + id
-                        )
+                        new UserNotFoundException(id)
                 );
     }
 
-    public ScoreDto getScoreByUserId(Long id){
+    public User register(RegisterUserRequest request) {
+
+        if (userRepository.findByEmail(request.email()).isPresent()) {
+            throw new EmailAlreadyExistsException(request.email());
+        }
+
+        User user = User.builder()
+                .name(request.name())
+                .email(request.email())
+                .passwordHash(passwordEncoder.encode(request.password()))
+                .build();
+
+        Score score = Score.builder()
+                .user(user)
+                .wins(0)
+                .losses(0)
+                .totalMatches(0)
+                .points(0)
+                .build();
+
+        user.setScore(score);
+
+        return userRepository.save(user);
+    }
+
+
+    public ScoreDto getScoreByUserId(String id){
         User user = getById(id);
         Score score = user.getScore();
 
@@ -37,7 +65,7 @@ public class UserService {
         );
     }
 
-    public void updateScore(Long userId, Boolean victory) {
+    public void updateScore(String userId, Boolean victory) {
         User user = getById(userId);
         Score score = user.getScore();
 
@@ -57,7 +85,7 @@ public class UserService {
         return userRepository.findRanking();
     }
 
-    public List<UserRankingDto> compareUsers(Long u1, Long u2) {
+    public List<UserRankingDto> compareUsers(String u1, String u2) {
         User user1 = getById(u1);
         User user2 = getById(u2);
 

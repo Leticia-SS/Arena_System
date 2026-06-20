@@ -1,4 +1,4 @@
-package com.example.arena_service.event;
+package com.example.event;
 
 public record MatchFinishedEvent(
         String matchId,

@@ -13,7 +13,7 @@ import lombok.*;
 public class Score {
 
     @Id
-    private Long id;
+    private String id;
 
     @OneToOne(fetch = FetchType.LAZY, optional = false)
     @MapsId
