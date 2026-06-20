@@ -1,8 +1,9 @@
 package com.example.arena_service.service;
 
-import com.example.arena_service.client.UserServiceClient;
 import com.example.arena_service.dto.*;
+import com.example.arena_service.event.MatchFinishedEvent;
 import com.example.arena_service.exception.*;
+import com.example.arena_service.kafka.MatchEventProducer;
 import com.example.arena_service.model.*;
 import com.example.arena_service.model.Character;
 import com.example.arena_service.model.enums.StatusEnum;
@@ -20,7 +21,7 @@ import java.util.stream.IntStream;
 public class MatchService {
     private final IMatchRepository matchRepository;
     private final ICharacterRepository characterRepository;
-    private final UserServiceClient userServiceClient;
+    private final MatchEventProducer matchEventProducer;
 
     public MatchResponseDto findById(String id){
         Match match = matchRepository.findById(id)
@@ -130,9 +131,9 @@ public class MatchService {
         }
 
         if (match.getStatus() == StatusEnum.FINISHED){
-            String loserId = winnerId.equals(match.getPlayer1Id()) ? match.getPlayer1Id() : match.getPlayer2Id();
-            boolean updated = userServiceClient.updateScore(winnerId, loserId);
-            match.setScoreUpdated(updated);
+            String loserId = winnerId.equals(match.getPlayer1Id()) ? match.getPlayer2Id() : match.getPlayer1Id();
+            matchEventProducer.sendMatchFinished(new MatchFinishedEvent(matchId, winnerId, loserId));
+            match.setScoreUpdated(true);
         }
 
         match.getTurnsLog().add(turn);

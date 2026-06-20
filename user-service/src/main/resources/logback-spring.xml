@@ -35,9 +35,9 @@
         <appender-ref ref="CONSOLE"/>
     </logger>
 
-    <root level="Debug">
-<!--        <appender-ref ref="LOGSTASH"/>-->
-        <appender-ref ref="CONSOLE"/>
+    <root level="INFO">
+        <appender-ref ref="LOGSTASH"/>
+<!--        <appender-ref ref="CONSOLE"/>-->
     </root>
 
 </configuration>
