@@ -1,8 +1,6 @@
 package com.example.service;
 
-import com.example.dto.RegisterUserRequest;
-import com.example.dto.ScoreDto;
-import com.example.dto.UserRankingDto;
+import com.example.dto.*;
 import com.example.exception.EmailAlreadyExistsException;
 import com.example.exception.UserNotFoundException;
 import com.example.model.Score;
@@ -27,7 +25,24 @@ public class UserService {
                 );
     }
 
-    public User register(RegisterUserRequest request) {
+    public List<UserDto> getAllUsers() {
+        return userRepository.findAll()
+                .stream()
+                .map(u -> new UserDto(
+                        u.getName(),
+                        u.getEmail(),
+                        u.getCreatedAt(),
+                        new ScoreDto(
+                                u.getScore().getWins(),
+                                u.getScore().getLosses(),
+                                u.getScore().getTotalMatches(),
+                                u.getScore().getPoints()
+                        )
+                ))
+                .toList();
+    }
+
+    public RegisterUserResponse register(RegisterUserRequest request) {
 
         if (userRepository.findByEmail(request.email()).isPresent()) {
             throw new EmailAlreadyExistsException(request.email());
@@ -49,7 +64,13 @@ public class UserService {
 
         user.setScore(score);
 
-        return userRepository.save(user);
+        User saved = userRepository.save(user);
+
+        return new RegisterUserResponse(
+                saved.getId(),
+                saved.getName(),
+                saved.getEmail()
+        );
     }
 
 

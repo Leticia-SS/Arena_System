@@ -26,6 +26,13 @@ public class UserController {
         this.userService = userService;
     }
 
+    @GetMapping
+    public ResponseEntity<List<UserDto>> getAllUsers() {
+        logger.info("GET /users | action=get_all_users");
+        List<UserDto> users = userService.getAllUsers();
+        return ResponseEntity.ok(users);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<?> getById(@PathVariable String id){
         logger.info("GET /users/{} | buscando usuário", id);
@@ -83,12 +90,12 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<Void> register(
+    public ResponseEntity<RegisterUserResponse> register(
             @Valid @RequestBody RegisterUserRequest request
     ) {
         logger.info("POST /users/register | email={}", request.email());
-        userService.register(request);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(userService.register(request));
     }
 
 }
