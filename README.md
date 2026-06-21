@@ -265,6 +265,9 @@ POST http://localhost:8085/api/matches/{id}/turn
 | Leticia Saraiva | arena-service | MongoDB | Personagens, combate e partidas |
 | Sarah Figueiredo | user-service | PostgreSQL | Cadastro, autenticação e pontuação |
 
+Arquivo de testes: [testes arena-system.pdf](https://github.com/user-attachments/files/29185705/testes.arena-system.pdf)
+
+
 ---
 
 ## Repositório
